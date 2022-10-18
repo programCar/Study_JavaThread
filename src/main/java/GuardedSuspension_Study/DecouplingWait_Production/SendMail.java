@@ -74,8 +74,12 @@ public class SendMail extends Thread{
          * 传递送信结果，完成线程交互。
          */
 
+        try {
+            MailBoxes.getMailBoxes(SendMailId).setResponse("您好，今天是星期四，请微我50参加肯德基疯狂星期四，showTime....Surprise");
+        }catch (NullPointerException e){
 
-        MailBoxes.getMailBoxes(SendMailId).setResponse("您好，今天是星期四，请微我50参加肯德基疯狂星期四，showTime....Surprise");
+            log.debug("喂喂喂~我是{}号信件邮递员，有人在吗？？嘶~~咦~~难道原邮箱格子的主人搬家了？？？",SendMailId);
+        }
 
 
     }
