@@ -119,7 +119,7 @@ public class ReceiveMail extends Thread{
 
             log.debug("看完了，真是一个surprise......(生气)");
 
-            MailBoxes.RemoveMail(myId);                                     //防止产生太多垃圾
+            MailBoxes.RemoveMail(myId);                                     //删掉已读邮箱格子，防止产生太多垃圾
 
             return;
 
@@ -131,6 +131,9 @@ public class ReceiveMail extends Thread{
          * 到时候再来看，信依然还在.
          */
 
-        log.debug("有没有搞错，那么慢，我不等了，回去喝可乐看动画片去.........");     //如果收信人发现信过了等待时间还没到，就去干其他事
+        log.debug("有没有搞错，那么慢，我不等了，回去喝可乐看动画片去.........");     //如果收信人发现邮箱格子过了等待时间还没到，就继续去干其他事
+
+
+        MailBoxes.RemoveMail(myId);                                         //删掉过期的邮箱格子，防止产生太多垃圾
     }
 }
