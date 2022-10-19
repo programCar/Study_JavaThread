@@ -1,8 +1,6 @@
 package Sleep_Wait_Notify_Compare;
 
-
 import lombok.extern.slf4j.Slf4j;
-
 
 /**
  * 用sleep()实现吃了烤鸭腿才干活的场景。
@@ -13,54 +11,48 @@ import lombok.extern.slf4j.Slf4j;
  *
  * 由于使用sleep()实现，外卖员就不能通过ROOM的门进去，只能挖墙进去，这样对共享资源ROOM的安全没有保障，存在很大的隐患
  */
-
-
 @Slf4j
 public class Sleep_Wait_Notify01 {
 
+    //房子，将来安装对象锁锁住住，给其他线程用
+    static final Object ROOM = new Object();
 
-    static final Object ROOM = new Object();                            //房子，将来安装对象锁锁住住，给其他线程用
-
-
-    static boolean roasted_DuckLeg = false;                             //烤鸭退，二狗子没有烤鸭腿不干活
+    //烤鸭退，二狗子没有烤鸭腿不干活
+    static boolean roasted_DuckLeg = false;
 
 
     public static void main(String[] args) {
 
+        /**
+         * 二狗子线程,没有烤鸭腿不干活
+         */
+         new Thread(() -> {
 
-         new Thread(() -> {                                             //二狗子线程,没有烤鸭腿不干活
-
-
-            synchronized(ROOM){                                         //二狗子锁住ROOM，没有烤鸭腿不干活，不开门,除非它走了
-
+             //二狗子锁住ROOM，没有烤鸭腿不干活，不开门,除非它走了
+            synchronized(ROOM){
 
                 log.debug("哟哟哟，到我喽，有烤鸭腿吃吗？");
 
-
                 log.debug("您好，现在的房间里的烤鸭腿为:{}",roasted_DuckLeg);
 
-
-                if (roasted_DuckLeg != true ){                         //二狗子看看有没有烤鸭腿，没有就不干活
+                //二狗子看看有没有烤鸭腿，没有就不干活
+                if (roasted_DuckLeg != true ){
 
                     log.debug("什么？？？没烤鸭腿？？没烤鸭腿不干活，hetui...");
 
-                    try {                                              //二狗子等待烤鸭腿送到ROOM
-
+                    //二狗子等待烤鸭腿送到ROOM
+                    try {
                         Thread.sleep(2000);
-
                     } catch (InterruptedException e) {
-
                         e.printStackTrace();
-
                     }
 
                 }
 
-
                 log.debug("有烤鸭腿没??");
 
-
-                if (roasted_DuckLeg == true){                         //外卖员烤鸭腿送到吃了就干活，随后开锁
+                //外卖员烤鸭腿送到吃了就干活，随后开锁
+                if (roasted_DuckLeg == true){
 
                     log.debug("您好，现在房间里的烤鸭腿为:{}",roasted_DuckLeg);
 
@@ -70,59 +62,49 @@ public class Sleep_Wait_Notify01 {
 
                 }
 
-
-                log.debug("烤鸭腿还没到....我不干了");                     //那么久还没送到，不干了，罢工，走
-
+                //那么久还没送到，不干了，罢工，走
+                log.debug("烤鸭腿还没到....我不干了");
 
             }
 
-
         },"二狗子").start();
 
+        //创建十个其他干活的人
+        for (int i = 0; i < 10; i++) {
 
-        for (int i = 0; i < 10; i++) {                              //其他干活的人
-
+            /**
+             * 其他干活的人
+             */
              new Thread(() -> {
-
 
                 synchronized (ROOM) {
 
-
                     log.debug("哟哟哟，到我喽，干活干活");
 
-
                 }
-
 
             }, "其他人").start();
 
         }
 
-
-        try {                                                       //正在做烤鸭腿
-
+        //正在做烤鸭腿
+        try {
             Thread.sleep(1000);
-
         } catch (InterruptedException e) {
-
             e.printStackTrace();
-
         }
 
-
-         new Thread(() -> {                                         //外卖员送烤鸭腿到ROOM
-
+        /**
+         * 外卖员送烤鸭腿到ROOM
+         */
+         new Thread(() -> {
 
                roasted_DuckLeg = true;
 
-
                log.debug("烤鸭腿来喽.....");
-
 
             },"外卖员").start();
 
-
     }
-
 
 }

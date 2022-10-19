@@ -1,8 +1,6 @@
 package GuardedSuspension_Study.DecouplingWait_Production;
 
-
 import lombok.extern.slf4j.Slf4j;
-
 
 /**
  *
@@ -13,71 +11,76 @@ import lombok.extern.slf4j.Slf4j;
  * 此类设计了防止虚假唤醒产生错误结果的机制，解决了被虚假唤醒产生错误结果的问题.
  *
  */
-
-
-
 @Slf4j
 public class GuardedObject_TimeOut {
 
+    //用于确保SendMail线程类实例与ReceiveMail线程类之间交互的准确唯一性
+    private int ID;
 
-    private int ID;                                             //用于确保SendMail线程类实例与ReceiveMail线程类之间交互的准确唯一性
-
-
-    public void setID(int ID){                                  //录入Id信息
+    //录入Id信息
+    public void setID(int ID){
 
         this.ID = ID;
     }
 
-
+    //返回本类ID
     public int getID(){                                         //传递Id信息
         return ID;
     }
 
-
-    private static Object response;                             //用于接收线程交互所产生的结果
-
-
-    public Object getResponse(long timeOut){                    //用于返回线程交互结果的方法
+    //用于接收线程交互所产生的结果
+    private static Object response;
 
 
-        if (timeOut <= 0 ){                                     //先判断等待是否大于等于0，增加程序的健壮性
+    /**
+     * 用于返回线程交互结果的方法
+     * @param timeOut
+     * @return
+     */
+    public Object getResponse(long timeOut){
+
+        //先判断等待是否大于等于0，增加程序的健壮性
+        if (timeOut <= 0 ){
+
             log.debug("等待时间不可以小于等于零");
+
             return -1;
+
         }
 
+        //锁住本类作为线程之间交互的房间
+        synchronized(this){
 
-        synchronized(this){                                     //锁住本类作为线程之间交互的房间
+            //记录调用本方法的开始时间
+            long beginTime = System.currentTimeMillis();
 
+            //记录调用本方法后等待了多长时间
+            long passTime = 0;
 
-            long beginTime = System.currentTimeMillis();        //记录调用本方法的开始时间
+            //防止虚假唤醒产生错误结果机制，看看叫的那个是不是自己
+            while (response == null){
 
+                //记录调用本方法后还需等待多长时间
+                long waitTime = timeOut - passTime;
 
-            long passTime = 0;                                  //记录调用本方法后等待了多长时间
-
-
-            while (response == null){                           //防止虚假唤醒产生错误结果机制，看看叫的那个是不是自己
-
-
-                long waitTime = timeOut - passTime;             //记录调用本方法后还需等待多长时间
-
-
-                if (waitTime <= 0){                             //如果还需等待的时间等于小于0，说明不必等待，结束循环
+                //如果还需等待的时间等于小于0，说明不必等待，结束循环
+                if (waitTime <= 0){
                     break;
                 }
 
-
-                try {                                           //等待机制
+                //等待机制
+                try {
                     this.wait(waitTime);
                 }catch (InterruptedException e){
                     e.printStackTrace();
                 }
 
-
-                passTime = System.currentTimeMillis() - beginTime;//计算调用本方法后等待了多少时间
+                //计算调用本方法后等待了多少时间
+                passTime = System.currentTimeMillis() - beginTime;
             }
 
-
-            return response;                                    //返回线程交互的结果
+            //返回线程交互的结果
+            return response;
 
 
         }
@@ -86,14 +89,23 @@ public class GuardedObject_TimeOut {
     }
 
 
-    public void setResponse(Object response){                   //传送此线程产生的结果，用于线程交互
+    /**
+     * 传送此线程产生的结果，用于线程交互
+     * @param response
+     */
+    public void setResponse(Object response){
 
+        //进入本对象锁房间
+        synchronized (this){
 
-        synchronized (this){                                    //进入本对象锁房间
+            //传送调用本方法的线程产生的结果
+            this.response = response;
 
-            this.response = response;                           //传送调用本方法的线程产生的结果
+            //唤醒所以在waitSet等待的线程，谁的谁拿
+            this.notifyAll();
 
-            this.notifyAll();                                   //唤醒所以在waitSet等待的线程，谁的谁拿
         }
+
     }
+
 }

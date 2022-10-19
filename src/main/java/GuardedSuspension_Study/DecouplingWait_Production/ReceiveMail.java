@@ -1,38 +1,42 @@
 package GuardedSuspension_Study.DecouplingWait_Production;
 
-
 import lombok.extern.slf4j.Slf4j;
-
 
 /**
  * 此类用作模拟收信,收信状态
  */
-
-
 @Slf4j
 public class ReceiveMail extends Thread{
 
-
-    private int waitTime;                                       //用作设定邮箱格子等待时间
-
-
-    public ReceiveMail(){
-
-    }
+    //用作设定邮箱格子等待时间
+    private int waitTime;
 
 
-    public ReceiveMail(String ThreadName, int waitTime){        //有参构造方法，初始化线程名字，便于辨别，初始化等待时间
+    //本类构造方法
+    public ReceiveMail(){}
+
+
+    /**
+     * 有参构造方法，初始化线程名字，便于辨别，初始化等待时间
+     * @param ThreadName
+     * @param waitTime
+     */
+    public ReceiveMail(String ThreadName, int waitTime){
 
         this.setName(ThreadName);
 
         this.waitTime = waitTime;
     }
 
+    //收信Id,用于打印效果和给予送信线程用，确保多线程交互之间的对接对象的准确性和唯一性
+    private int myId = MailBoxes.createMailBox();
 
-    private int myId = MailBoxes.createMailBox();                           //收信Id,用于打印效果和给予送信线程用，确保多线程交互之间的对接对象的准确性和唯一性
 
-
-    public int getMyId(){                                                   //给予送信线程送信的Id
+    /**
+     * 给予送信线程送信的Id
+     * @return
+     */
+    public int getMyId(){
 
             return myId;
 
@@ -95,23 +99,18 @@ public class ReceiveMail extends Thread{
      *
      * 解决了（2）（3）设计情况所造成的缺陷，维护增加了了多线程交互之间的安全性
      */
-
-
-
     @Override
     public void run() {
 
-
         log.debug("哇~~~我终于有了自己的邮箱 :{}",myId);
-
 
         log.debug("听说新手注册邮箱就送50，好期待啊......");
 
+        //接收线程交互信息载体中的信息
+        Object freight = MailBoxes.getMailBoxes(myId).getResponse(waitTime);
 
-        Object freight = MailBoxes.getMailBoxes(myId).getResponse(waitTime);//接收线程交互信息载体中的信息
-
-
-        if (freight != null){                                               //如果信到了，则通知收信人
+        //如果信到了，则通知收信人
+        if (freight != null){
 
             log.debug("叮咚~~~您好，您的邮箱已更新，邮箱信息为 :{}",freight);
 
@@ -119,7 +118,8 @@ public class ReceiveMail extends Thread{
 
             log.debug("看完了，真是一个surprise......(生气)");
 
-            MailBoxes.RemoveMail(myId);                                     //删掉已读邮箱格子，防止产生太多垃圾
+            //删掉已读邮箱格子，防止产生太多垃圾
+            MailBoxes.RemoveMail(myId);
 
             return;
 
@@ -130,10 +130,12 @@ public class ReceiveMail extends Thread{
          * 因为采用的是缓存区（MailBoxes类）储存信，所以只要在设定的等待时间内，哪怕收信人不等待信，一旦信送到，信也会储存在邮箱中
          * 到时候再来看，信依然还在.
          */
+        //如果收信人发现邮箱格子过了等待时间还没到，就继续去干其他事
+        log.debug("有没有搞错，那么慢，我不等了，回去喝可乐看动画片去.........");
 
-        log.debug("有没有搞错，那么慢，我不等了，回去喝可乐看动画片去.........");     //如果收信人发现邮箱格子过了等待时间还没到，就继续去干其他事
+        //删掉过期的邮箱格子，防止产生太多垃圾
+        MailBoxes.RemoveMail(myId);
 
-
-        MailBoxes.RemoveMail(myId);                                         //删掉过期的邮箱格子，防止产生太多垃圾
     }
+
 }

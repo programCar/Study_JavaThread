@@ -5,11 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Thread_synchronized {
 
-    static int counter_test = 0;                                    //未改良程序的共享资源
+    //未改良程序的共享资源
+    static int counter_test = 0;
 
-    static int counter = 0;                                         //改良后的程序共享资源
+    //改良后的程序共享资源
+    static int counter = 0;
 
-    static Object Lock = new Object();                              //创建synchronized锁所使用的对象
+    //创建synchronized锁所使用的对象
+    static Object Lock = new Object();
+
 
     public static void main(String[] args) {
 
