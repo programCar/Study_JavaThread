@@ -23,7 +23,7 @@ import java.util.Set;
  * 以下注释中的（信息载体）:是指本包中的GuardedObject_TimeOut类
  *
  */
-public class MailBoxes {
+public final class MailBoxes {
 
     //模拟邮箱，作为线程交互的缓存区，实现解耦
     static final Map<Integer,GuardedObject_TimeOut> mailBoxes = new Hashtable<Integer,GuardedObject_TimeOut>();

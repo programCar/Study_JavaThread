@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @Slf4j
-public class GuardedObject_TimeOut {
+public final class GuardedObject_TimeOut {
 
     //用于确保SendMail线程类实例与ReceiveMail线程类之间交互的准确唯一性
     private int ID;
