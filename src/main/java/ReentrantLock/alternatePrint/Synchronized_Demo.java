@@ -1,5 +1,8 @@
 package ReentrantLock.alternatePrint;
 
+/**
+ * 对Synchronized类的测试
+ */
 public class Synchronized_Demo {
 
     public static void main(String[] args) {

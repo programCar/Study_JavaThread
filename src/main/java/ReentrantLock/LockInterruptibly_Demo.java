@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * ReentrantLock的可打断特性的学习
+ */
 @Slf4j
 public class LockInterruptibly_Demo {
 

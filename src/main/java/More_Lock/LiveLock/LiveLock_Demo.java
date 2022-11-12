@@ -2,6 +2,9 @@ package More_Lock.LiveLock;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 多线程学习。活锁演示
+ */
 @Slf4j
 public class LiveLock_Demo {
 

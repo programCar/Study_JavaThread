@@ -5,6 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * Condition学习，改进模拟送外卖类的运行
+ */
 @Slf4j
 public class Condition_Demo {
 

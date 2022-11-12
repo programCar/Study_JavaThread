@@ -3,6 +3,9 @@ package ReentrantLock.Philosopher_ReentrantLock;
 import ReentrantLock.Philosopher_ReentrantLock.Chopsticks;
 import ReentrantLock.Philosopher_ReentrantLock.Philosopher;
 
+/**
+ * 运用ReentrantLock解决哲学家就餐死锁和饥饿问题
+ */
 public class Dine {
 
     public static void main(String[] args) {

@@ -2,6 +2,9 @@ package ReentrantLock.Synchronized_OrderGo;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 多线程可选择性执行模式的学习--Synchronized
+ */
 @Slf4j
 public class Synchronized_OrderGo {
 

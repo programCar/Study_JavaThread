@@ -5,6 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * ReentrantLock可超时特性的学习
+ */
 @Slf4j
 public class TimeOutLock_Demo {
 

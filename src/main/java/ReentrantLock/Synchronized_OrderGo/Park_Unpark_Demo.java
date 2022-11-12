@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.locks.LockSupport;
 
+/**
+ * 多线程可选择性执行模式的学习--LockSupport中的park和Unpark
+ */
 @Slf4j
 public class Park_Unpark_Demo {
 

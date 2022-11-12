@@ -2,6 +2,9 @@ package ReentrantLock.alternatePrint;
 
 import java.util.concurrent.locks.Condition;
 
+/**
+ * 对Reentrant_Lock类的测试
+ */
 public class ReentrantLock_Demo {
 
     public static void main(String[] args) {

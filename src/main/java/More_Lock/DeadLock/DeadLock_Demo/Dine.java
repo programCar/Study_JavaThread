@@ -1,5 +1,9 @@
 package More_Lock.DeadLock.DeadLock_Demo;
 
+
+/**
+ * 多线程学习，死锁演示，哲学家问题
+ */
 public class Dine {
 
     public static void main(String[] args) {

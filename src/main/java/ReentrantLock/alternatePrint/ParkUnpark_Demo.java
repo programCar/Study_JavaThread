@@ -2,6 +2,9 @@ package ReentrantLock.alternatePrint;
 
 import java.util.concurrent.locks.LockSupport;
 
+/**
+ * 对ParkUnpark类的测试
+ */
 public class ParkUnpark_Demo {
 
     private static Thread a;
